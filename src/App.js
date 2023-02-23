@@ -1,24 +1,28 @@
-import logo from './logo.svg';
 import './App.css';
+import MainpageCon from './containers/mainpageCon'
+import AboutUs from './containers/aboutusCon'
+import ContactUs from './containers/contactusCon'
+import KMB from './containers/kmbCon'
+import NEWBUS from './containers/newbusCon'
+import MINIBUS from './containers/minibusCon'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainpageCon />} />
+        <Route path="/aboutus" element={<AboutUs />} />
+        <Route path="/contactus" element={<ContactUs />} />
+        <Route path="/kmb" element={<KMB />} />
+        <Route path="/newbus" element={<NEWBUS />} />
+        <Route path="/minibus" element={<MINIBUS />} />
+      </Routes>
+    </BrowserRouter>
+
+
   );
 }
 
