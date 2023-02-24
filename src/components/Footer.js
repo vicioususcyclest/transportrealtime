@@ -1,29 +1,47 @@
 import Typography from "@mui/material/Typography";
+import Grid from '@mui/material/Unstable_Grid2';
+
+// {/* <Grid sx={{
+//     // position: 'static',
+//     bottom: '0px',
+//     width: '100%',
+//     height: '200px',
+//     backgroundColor: '#2e7d32',
+//     display: 'flex',
+//     flexDirection: 'column',
+//     alignItems: 'center',
+//     justifyContent: 'center'
+
+// }}> */}
 
 
 export default function footer() {
     return (
-        <div className="footer-container">
-            <Typography color='white' sx={{ fontFamily: 'Gloock', }}>
-                <div className="footer">
-                    <div>
-                        <div className="footer-title">
-                            TransportRealtime
-                        </div>
-                        <div className="footer-desc"> Author: Felix Wong</div>
-                    </div>
-                    <div className="footer-contact">
-                        <div>phone : +852 9342 8421</div>
-                        <div>Email : felix99923@gmail.com</div>
-
-                        <div>
-                            Location : Hong Kong
-                        </div>
-                        <div>Opening : Monday to Friday from 8:30AM - 6:00PM (GMT+4)</div>
-                    </div>
-                </div>
-                <div className="footer-divider" />
+        <Grid container sx={{
+            // position: 'static',
+            bottom: '0px',
+            width: '100%',
+            height: '200px',
+            backgroundColor: '#2e7d32',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+        }}>
+            <Typography variant='div' color='white' sx={{ fontFamily: 'Gloock', fontSize: '15px', }}>
+                <Grid>
+                    <Grid>
+                        TransportRealtime
+                    </Grid>
+                    <Grid> Author: Felix Wong</Grid>
+                    <Grid>phone : +852 9342 8421</Grid>
+                    <Grid>Email : felix99923@gmail.com</Grid>
+                    <Grid>
+                        Location : Hong Kong
+                    </Grid>
+                    <Grid>Office Hour : Monday to Friday from 9:00AM - 5:00PM (GMT+4)</Grid>
+                </Grid>
             </Typography>
-        </div>
+        </Grid >
     )
 }

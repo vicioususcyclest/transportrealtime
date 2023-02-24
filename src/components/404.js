@@ -27,17 +27,10 @@ export default function mainpage() {
         <ThemeProvider theme={contenttheme}>
             {/* <Container  > */}
             <Grid container >
-                <Grid container md={6} xs={12} sx={{ justifyContent: 'center', border: '1px solid', height: { xs: '50vh', md: '100vh' } }}>
-                    <Grid sx={{ width: '100%' }}>
-                        <Typography variant="h1" sx={{ textAlign: 'center', border: '1px solid', mt: { xs: '100px', md: '125px' } }}>
-                            PIC
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Grid container md={6} xs={12} sx={{ justifyContent: 'center', border: '1px solid', height: { xs: '50vh', md: '100vh' }, }}>
+                <Grid container md={12} xs={12} sx={{ justifyContent: 'center', border: '1px solid', height: { xs: '50vh', md: '100vh' }, }}>
                     <Grid sx={{ width: '100%' }}>
                         <Typography variant="h1" sx={{ textAlign: 'center', border: '1px solid', mt: '100px', overflowWrap: 'break-word' }}>
-                            KMB
+                            404 NOT FOUND
                         </Typography>
                     </Grid>
                 </Grid>

@@ -1,5 +1,5 @@
 import Header from "../components/Header";
-import Mainpage from "../components/AboutUs";
+import Mainpage from "../components/404";
 import Footer from "../components/Footer";
 import Grid from '@mui/material/Unstable_Grid2';
 import { border } from "@mui/system";

@@ -1,19 +1,23 @@
 import Header from "../components/Header";
-import Section from "../components/NewBus";
+import Mainpage from "../components/NewBus";
 import Footer from "../components/Footer";
 import Grid from '@mui/material/Unstable_Grid2';
 
-export default function newbus() {
+
+export default function mainpage() {
     return (
-        <Grid Container>
-            <Grid>
+        <Grid container sx={{ justifyContent: 'center', width: '100%', overflowWrap: 'break-word' }}>
+            <Grid xs={12}>
                 <Header />
             </Grid>
-            <Grid sx={{ height: '100vh' }}>
-                <Section />
+
+            <Grid xs={12} maxWidth="xl">
+                <Mainpage />
             </Grid>
-            <Grid sx={{
+
+            <Grid xs={12} sx={{
                 // position: 'static',
+                position: "relative",
                 bottom: '0px',
                 width: '100%',
                 height: '200px',
@@ -21,8 +25,9 @@ export default function newbus() {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'center'
-
+                justifyContent: 'center',
+                mt: 'auto',
+                overflowWrap: 'break-word',
             }}>
                 <Footer />
             </Grid>

@@ -1,29 +1,21 @@
 import Header from "../components/Header";
-import Section from "../components/Mainpage";
+import Mainpage from "../components/Mainpage";
 import Footer from "../components/Footer";
 import Grid from '@mui/material/Unstable_Grid2';
+import { border } from "@mui/system";
 
 export default function mainpage() {
     return (
-        <Grid Container>
-            <Grid>
+        <Grid container sx={{ justifyContent: 'center', width: '100%', }}>
+            <Grid xs={12}>
                 <Header />
             </Grid>
-            <Grid sx={{ height: '100vh' }}>
-                <Section />
-            </Grid>
-            <Grid sx={{
-                // position: 'static',
-                bottom: '0px',
-                width: '100%',
-                height: '200px',
-                backgroundColor: '#2e7d32',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center'
 
-            }}>
+            <Grid xs={12} sx={{ border: '1px solid', minHeight: '500px' }} maxWidth="xl">
+                <Mainpage />
+            </Grid>
+
+            <Grid xs={12} >
                 <Footer />
             </Grid>
         </Grid >

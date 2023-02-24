@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import DepartureBoardIcon from '@mui/icons-material/DepartureBoard';
 import { createTheme, ThemeProvider } from '@mui/material/styles'//import theme (to config some style) 
 import Grid from '@mui/material/Unstable_Grid2';
+import Typography from '@mui/material/Typography';
 
 const Headertheme = createTheme({ //Create a theme which set the color
   // palette: { //set the mannual color
@@ -17,6 +18,17 @@ const Headertheme = createTheme({ //Create a theme which set the color
   //     contrastText: 'white'
   //   },
   // },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+      hd: 800
+    }
+  },
+
   typography: {
     fontSize: 20,
     mr: 2,
@@ -37,27 +49,27 @@ export default function Header({ page, background }) {
       <AppBar position="relative" color='success'>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Grid container xs={12} sm={12} md={12} xl={12}>
-              <Grid xl={6} md={6} container sx={{ alignItems: 'center' }}>
+            <Grid container xs={12} sm={12} md={12} xl={12} >
+              <Grid sm={6} hd={4} container sx={{ alignItems: 'center' }}>
                 <Grid>
                   <IconButton aria-label="Home" >
                     <Link to={"/"} style={{ color: '#FFF' }}>
-                      <DepartureBoardIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, }} />
+                      <DepartureBoardIcon sx={{ mr: 1, }} />
                     </Link>
                   </IconButton>
-                  <Link to={"/"} style={{ position: 'relative', top: '4px', color: '#FFF', fontFamily: 'Gloock', textDecoration: 'none', fontSize: 20 }}>TransportRealtime</Link>
+                  <Link to={"/"} style={Headertheme.typography}>TransportRealtime</Link>
                 </Grid>
               </Grid>
-              <Grid id="button" container xl={6} md={6} sx={{ alignItems: 'center' }}>
+              <Grid id="button" container hd={8} sm={6} sx={{ alignItems: 'center', justifyContent: { hd: 'flex-end' } }}>
                 <Grid sx={{ justifyContent: 'flex-right' }}>
                   <Link to={"/aboutus"} style={{ textDecoration: 'none' }}>
                     <Button sx={{ color: '#FFF', }}>About Us</Button>
                   </Link>
                   <Link to={"/newbus"} style={{ textDecoration: 'none' }}>
-                    <Button sx={{ color: '#FFF', }}>New Bus</Button>
+                    <Button sx={{ color: '#FFF' }}>New Bus</Button>
                   </Link>
-                  <Link to={"/minibus"} style={{ textDecoration: 'none' }}>
-                    <Button sx={{ color: '#FFF', }}>Minibus</Button>
+                  <Link to={"/minibus"} style={{ textDecoration: 'none', }}>
+                    <Button sx={{ color: '#FFF', marign: '0px' }}><span>Minibus</span></Button>
                   </Link>
                   <Link to={"/kmb"} style={{ textDecoration: 'none' }}>
                     <Button sx={{ color: '#FFF', }}>KMB</Button>
@@ -71,6 +83,6 @@ export default function Header({ page, background }) {
           </Toolbar>
         </Container>
       </AppBar>
-    </ThemeProvider>
+    </ThemeProvider >
   );
 }
