@@ -1,3 +1,11 @@
-import NEWBUS from '../pages/newbus'
+import newbus from '../pages/newbus'
+import { connect } from "react-redux";
+import { testing } from "../reducers/newbusSlice";
 
-export default NEWBUS;
+const mapStateToProps = (state) => ({
+    newbus: state.newbus,
+});
+
+const mapDispatchToProps = { testing };
+
+export default connect(mapStateToProps, mapDispatchToProps)(newbus);

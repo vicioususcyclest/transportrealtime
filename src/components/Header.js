@@ -43,7 +43,6 @@ const Headertheme = createTheme({ //Create a theme which set the color
 });
 // 
 export default function Header({ page, background }) {
-  console.log(page);
   return (
     <ThemeProvider theme={Headertheme}>
       <AppBar position="relative" color='success'>
