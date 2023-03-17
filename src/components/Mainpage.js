@@ -35,7 +35,7 @@ import { Paper } from '@mui/material';
 
 const contenttheme = createTheme({ //Create a theme which set the color
     typography: {
-        fontSize: { md: '20' },
+        fontSize: { md: 20 },
         mr: 2,
         fontFamily: 'Lilita One',
         color: 'white',

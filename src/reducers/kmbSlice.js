@@ -12,7 +12,7 @@ import { createSlice } from "@reduxjs/toolkit";
 // const [timeline, setTimeline] = useState('')
 // const [getallstopinfo, setGetallstopinfo] = useState(false)
 
-const newbusStateInit = {
+const kmbStateInit = {
     route: '',
     baseURL: '',
     direction: '',
@@ -26,9 +26,9 @@ const newbusStateInit = {
     getallstopinfo: false,
 };
 
-const newbusSlice = createSlice({
-    name: "newbusState",
-    initialState: newbusStateInit,
+const kmbSlice = createSlice({
+    name: "kmbState",
+    initialState: kmbStateInit,
     reducers: {
         setRoute(state, action) {
             state.route = action.payload
@@ -78,6 +78,6 @@ export const {
     setTempETAarr,
     setTimeline,
     setGetallstopinfo,
-} = newbusSlice.actions;
+} = kmbSlice.actions;
 
-export default newbusSlice.reducer;
+export default kmbSlice.reducer;

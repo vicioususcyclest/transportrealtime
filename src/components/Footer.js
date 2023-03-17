@@ -28,7 +28,7 @@ export default function footer() {
             alignItems: 'center',
             justifyContent: 'center',
         }}>
-            <Typography variant='div' color='white' sx={{ fontFamily: 'Gloock', fontSize: '15px', }}>
+            <Typography variant='div' color='white' sx={{ fontFamily: 'Gloock', fontSize: 15, }}>
                 <Grid>
                     <Grid>
                         TransportRealtime

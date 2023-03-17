@@ -8,7 +8,7 @@ import { auto } from '@popperjs/core';
 
 const contenttheme = createTheme({ //Create a theme which set the color
     typography: {
-        fontSize: { md: '20' },
+        fontSize: [{ md: 20 }, "!important"],
         mr: 2,
         fontFamily: 'Lilita One',
         color: 'white',

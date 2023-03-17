@@ -14,10 +14,10 @@ export default function router() {
             <Route path="/404" element={<My404Component />} />
             <Route path="/" element={<MainpageCon />} />
             <Route path="/aboutus" element={<AboutUs />} />
-            <Route path="/contactus" element={<ContactUs />} />
+            {/* <Route path="/contactus" element={<ContactUs />} /> */}
             <Route path="/kmb" element={<KMB />} />
             <Route path="/newbus" element={<NEWBUS />} />
-            <Route path="/minibus" element={<MINIBUS />} />
+            {/* <Route path="/minibus" element={<MINIBUS />} /> */}
         </Routes>
     )
 }
