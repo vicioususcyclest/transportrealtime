@@ -52,8 +52,14 @@ const newbusSlice = createSlice({
             state.loadinginfo = action.payload
         },
         setStopinfo(state, action) {
-            state.stopinfo.push(action.payload)
-            state.stopinfo.sort((a, b) => a.seq - b.seq);
+            console.log(action)
+            if (action.payload == "clear") {
+                state.stopinfo = []
+                console.log(state.stopinfo)
+            } else {
+                state.stopinfo.push(action.payload)
+                state.stopinfo.sort((a, b) => a.seq - b.seq);
+            }
         },
         setTempETAarr(state, action) {
             state.tempETAarr = action.payload

@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import car from '../asset/car.webp'
 import { useScroll, animated, useSpring } from '@react-spring/web'
 import { auto } from '@popperjs/core';
-import CircularProgress from '@mui/material/CircularProgress';
+import LinearProgress from '@mui/material/LinearProgress';
 import { Button, Paper, Card, TextField, Select, MenuItem, InputLabel, FormControl, IconButton, CardContent } from '@mui/material';
 import PlaceSharpIcon from '@mui/icons-material/PlaceSharp';
 import Timeline from '@mui/lab/Timeline';
@@ -49,7 +49,7 @@ export default function Newbus({ newbus,
     setStopinfo,
     setTempETAarr,
     setGetallstopinfo,
-    //setloadinginfo,
+    setloadinginfo,
 }) {
     //- Original -
     // useRef = reference a value that’s not needed for rendering
@@ -65,8 +65,11 @@ export default function Newbus({ newbus,
     // const [tempETAarr, setTempETAarr] = useState([])
     const [timeline, setTimeline] = useState('') // non-serializable value cannot put in state/action
     // const [getallstopinfo, setGetallstopinfo] = useState(false)
+    const [ifclear, setifclear] = useState("")
+    var temparr = []
 
     function clear() {
+        console.log(newbus.route)
         setRoute('')
         setBaseURl('')
         setDirection('')
@@ -76,6 +79,7 @@ export default function Newbus({ newbus,
         setTempETAarr([])
         setGetallstopinfo(false)
         setTimeline('')
+        setloadings2(false)
     }
 
 
@@ -87,7 +91,6 @@ export default function Newbus({ newbus,
     }
 
     function setRou(value) {
-        console.log('set' + value)
         setRoute(value)
     }
 
@@ -103,15 +106,40 @@ export default function Newbus({ newbus,
     //3. Call handle company/dir and setBaseURl
     function handleinput() {
         if (newbus.route !== '' && newbus.direction !== '' && newbus.company !== '') {
-            console.log('I am handlecompany: ' + newbus.company)
-            console.log('https://rt.data.gov.hk/v1.1/transport/citybus-nwfb/route-stop/' + newbus.company + '/' + newbus.route + '/' + newbus.direction)
+            console.log('I am handleinput(): route=' + newbus.route + ' Direction=' + newbus.direction + ' Company=' + newbus.company)
+            console.log('BaseURl= https://rt.data.gov.hk/v1.1/transport/citybus-nwfb/route-stop/' + newbus.company + '/' + newbus.route + '/' + newbus.direction)
             setBaseURl('https://rt.data.gov.hk/v1.1/transport/citybus-nwfb/route-stop/' + newbus.company + '/' + newbus.route + '/' + newbus.direction);
         }
     }
 
+    //new 4. after clicking search, call GetRoute to get the route data
+    //Cant put all in a single func -> useEffect is needed
+    function Search() {
 
-    //4. after the baseURL changed, call getroute
-    useEffect(() => { GetRoute() }, [newbus.baseURL])
+        setifclear("false")
+        console.log(newbus.baseURL)
+        setData('')
+        console.log(newbus.stopinfo)
+        setStopinfo("clear")
+        setTempETAarr([])
+        setGetallstopinfo(false)
+        setTimeline('')
+    }
+    //new 4.1
+
+    useEffect(() => {
+        console.log(newbus.stopinfo)
+        if (ifclear == "false") Resetclear()
+        else if (ifclear == "true") GetRoute()
+    }, [ifclear])
+
+    function Resetclear() {
+        setifclear("true")
+    }
+
+
+
+    //new 4.2
 
     //5. Get the whole route via axios and set the data
     async function GetRoute() { //asynchronous programming 
@@ -135,23 +163,17 @@ export default function Newbus({ newbus,
         if (newbus.data === '') { }
         else {
             newbus.data.data.map((r, i) => {
-                // console.log(GetStopInfo(r.stop, stopinfo, r.seq).then((val)=>{}))
                 GetStopInfo(r.stop, newbus.stopinfo, r.seq)
-                // .then((item) => {
-                //     if (item.length === data.data.length) {
-                //          return updatestopinfo(item)
-                //     }
-                // })
             })
 
         }
     }
 
     //8. Call getstop, add seq into the data, Update the stop info whrough stpinfo.push (pass by reference)
-    async function GetStopInfo(stop, stpinfo, seq) { //asynchronous programming 
+    async function GetStopInfo(stop, seq) { //asynchronous programming 
         var stationInfoURL = 'https://rt.data.gov.hk/v1.1/transport/citybus-nwfb/stop/' + stop
         if (newbus.route !== '' && newbus.company !== '' && newbus.data !== '') {
-            console.log('I am axios GetStopInfo: ' + stationInfoURL)
+            //console.log('I am axios GetStopInfo: ' + stationInfoURL)
 
             await axios.get(stationInfoURL).
                 then((res) => {
@@ -166,18 +188,26 @@ export default function Newbus({ newbus,
         }
     }
 
-    function Search2() {
-        console.log(newbus.stopinfo)
-        setGetallstopinfo(true)
-        setloadings2(false)
+    //9. Check the stopinfo are all gotten
+    useEffect(() => { Isgetallstopinfo() }, [newbus.stopinfo])
+
+    function Isgetallstopinfo() {
+        if (newbus.data != '' && newbus.stopinfo != []) {
+            //console.log("newbus.data.data.length: " + newbus.data.data.length + " //newbus.stopinfo.length: " + newbus.stopinfo.length)
+            if (newbus.data.data.length == newbus.stopinfo.length) {
+                setGetallstopinfo(true)
+                setTimeout(setloadings2(false), 2000)
+            }
+        }
     }
 
+    //10. After all stop infos got, call getModules
     useEffect(() => { getModules() }, [newbus.getallstopinfo])
 
     const getModules = () => {
-        {
             if (newbus.data === '') { }
             else {
+                console.log(newbus.data.data)
                 console.log(newbus.stopinfo)
                 setTimeline(
                     newbus.data.data.map((r, i) => {
@@ -199,15 +229,9 @@ export default function Newbus({ newbus,
                         );
                     }))
             }
-
-        }
     }
 
-
-    // function loadinginfofunc() {
-    //     setloadinginfo(true)
-    // }
-
+    //11. After clicking the stop button, call the GetETAInfo
     async function GetETAInfo(stop) { //asynchronous programming 
         if (newbus.route !== '' && newbus.company !== '' && newbus.data !== '') {
             var ETAInfoURL = 'https://rt.data.gov.hk/v1.1/transport/citybus-nwfb/eta/' + newbus.company + '/' + stop + '/' + newbus.route
@@ -248,24 +272,24 @@ export default function Newbus({ newbus,
     return (
         <ThemeProvider theme={contenttheme}>
 
-            <Grid container sx={{ height: { xs: '85vh', md: '100vh' }, minHeight: '300px', justifyContent: 'center' }} >
+            <Grid container sx={{ height: { xs: '85vh', md: '100vh' }, minHeight: '300px', justifyContent: 'center', marginTop: '10px'  }} >
 
                 <Grid container xs={12} sx={{ height: { xs: '5vh' }, border: 'solid 1px', justifyContent: 'space-evenly', alignItems: 'center' }}>
 
                     <Grid container xs={12} sm={2} sx={{ width: { xs: '100vw', sm: '15vw' }, alignItems: 'center' }}>
                         <Grid xs={4}>
                             <Typography variant='h2' sx={{ textAlign: 'center' }}>
-                                Search:&nbsp;
+                                Route:&nbsp;
                             </Typography>
                         </Grid>
                         <Grid xs={8}>
                             <TextField variant='outlined' size="small" fullWidth
-                                onFocus={(e) => {
-                                    console.log('Focused on input');
-                                }}
-                                onBlur={(e) => {
-                                    console.log(e.target.value)
-                                }}
+                                // onFocus={(e) => {
+                                //     console.log('Focused on input');
+                                // }}
+                                // onBlur={(e) => {
+                                //     console.log(e.target.value)
+                                // }}
                                 onChange={(e) => {
                                     setRou(e.target.value)
                                 }}
@@ -306,10 +330,10 @@ export default function Newbus({ newbus,
                         </FormControl>
                     </Grid>
                     <Grid xs={12} sm={2} >
-                        <LoadingButton loading={newbus.loadings2} fullWidth variant='contained' color='success' onClick={(e) => { setloadings2(true); setTimeout(Search2, 2000) }}>Search</LoadingButton>
+                        <LoadingButton loading={newbus.loadings2} fullWidth variant='contained' color='success' onClick={(e) => { setloadings2(true); Search(); /*setTimeout(Search, 2000)*/ }}>Search</LoadingButton>
                     </Grid>
                     <Grid xs={12} sm={1} >
-                        <LoadingButton loading={newbus.loadings2} fullWidth variant='contained' color='success' onClick={(e) => { clear() }}>Clear</LoadingButton>
+                        <Button fullWidth variant='contained' color='success' onClick={(e) => { clear() }}>Clear</Button>
                     </Grid>
                     {/* <Grid xs={12} sm={1} sx={{ width: { xs: '80vw', sm: '100px' }, ml: '10px' }}>
                         <Button fullWidth variant='contained' color='success'
@@ -353,7 +377,7 @@ export default function Newbus({ newbus,
                             <CardContent>
                                 <Typography component="h1" sx={{ textAlign: 'center' }}>Estimated Time:
                                 </Typography>
-                                {newbus.loadinginfo && <CircularProgress sx={{ ml: '280px', mt: '20vh' }} color="success" />}
+                                <LinearProgress sx={{ minWidth: 650, transition: 'none' }} color="success" />
 
                                 <TableContainer component={Paper}>
                                     <Table sx={{ minWidth: 650 }} aria-label="simple table">

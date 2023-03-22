@@ -233,9 +233,9 @@ export default function Minibus({ minibus, setRoute,
     return (
         <ThemeProvider theme={contenttheme}>
 
-            <Grid container sx={{ height: { xs: '85vh', md: '100vh' }, minHeight: '300px', justifyContent: 'center' }} >
+            <Grid container sx={{ height: { xs: '85vh', md: '100vh' }, minHeight: '300px', justifyContent: 'center',  }} >
 
-                <Grid container xs={12} sx={{ height: { xs: '5vh' }, border: 'solid 1px', justifyContent: 'center', alignItems: 'center' }}>
+                <Grid container xs={12} sx={{ height: { xs: '5vh' }, border: 'solid 1px', justifyContent: 'center', alignItems: 'center',  }}>
                     <Grid xs={12} sm={2} >
                         <Typography variant='h2' sx={{ textAlign: 'center' }}>
                             Search:
