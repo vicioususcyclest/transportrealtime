@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import car from '../asset/car.webp'
 import { useScroll, animated, useSpring } from '@react-spring/web'
 import { auto } from '@popperjs/core';
-import CircularProgress from '@mui/material/CircularProgress';
+import LinearProgress from '@mui/material/LinearProgress';
 import { Button, Paper, Card, TextField, Select, MenuItem, InputLabel, FormControl, IconButton, CardContent } from '@mui/material';
 import PlaceSharpIcon from '@mui/icons-material/PlaceSharp';
 import Timeline from '@mui/lab/Timeline';
@@ -28,31 +28,30 @@ import TableRow from '@mui/material/TableRow';
 
 const contenttheme = createTheme({ //Create a theme which set the color
     typography: {
-        fontSize: { md: 20 },
+        fontSize: 20,
         mr: 2,
         fontFamily: 'Lilita One',
         color: 'white',
         textDecoration: 'none',
-
     },
-
 });
 
 
-export default function KMB({ kmb, setRoute,
+export default function KMB({ kmb,
+    setRoute,
     setBaseURl,
     setDirection,
     setCompany,
     setData,
     setloadings2,
-    setloadinginfo,
     setStopinfo,
     setTempETAarr,
-
-    setGetallstopinfo, }) {
-    const input1 = useRef();
+    setGetallstopinfo,
+    setloadinginfo,
+}) {
     //- Original -
     // useRef = reference a value that’s not needed for rendering
+    //const input1 = useRef();
     // const [Route, setRoute] = useState('')
     // const [baseURL, setBaseURl] = useState('')
     // const [direction, setDirection] = useState('')
@@ -62,12 +61,38 @@ export default function KMB({ kmb, setRoute,
     // const [loadinginfo, setloadinginfo] = useState(false)
     // const [stopinfo, setStopinfo] = useState([])
     // const [tempETAarr, setTempETAarr] = useState([])
-    const [timeline, setTimeline] = useState('') // non-serializable value
+    const [timeline, setTimeline] = useState('') // non-serializable value cannot put in state/action
     // const [getallstopinfo, setGetallstopinfo] = useState(false)
+    const [ifclear, setifclear] = useState("")
+    const [loadingword, setloadingword] = useState("determinate")
+    const [loadingval, setloadingval] = useState(0)
 
-    // 1. after select the company, set the state of company / after select the dir, set the state of dir
+    function clear() {
+        console.log(kmb.route)
+        setRoute('')
+        setBaseURl('')
+        setDirection('')
+        setCompany('kmb')
+        setData('')
+        setStopinfo([])
+        setTempETAarr([])
+        setGetallstopinfo(false)
+        setTimeline('')
+        setloadings2(false)
+        setloadingword("determinate")
+        setloadingval(0)
+    }
+
+
+
+
+    //1. after select the company, set the state of company / after select the dir, set the state of dir
     function setCom(value) {
         setCompany(value.target.value)
+    }
+
+    function setRou(value) {
+        setRoute(value)
     }
 
     function setDir(value) {
@@ -75,32 +100,53 @@ export default function KMB({ kmb, setRoute,
     }
 
     //2. the state of company change, call handle company / the state of dir change, call handle dir
-    // useEffect(() => { handlecompany() }, [kmb.company])
-    useEffect(() => { handledirection() }, [kmb.direction])
+    useEffect(() => { handleinput() }, [kmb.company])
+    useEffect(() => { handleinput() }, [kmb.direction])
+    useEffect(() => { handleinput() }, [kmb.route])
 
     //3. Call handle company/dir and setBaseURl
-    // function handlecompany() {
-    //     if (kmb.route !== '' && kmb.direction !== '' && kmb.company !== '') {
-    //         console.log('I am handlecompany: ' + kmb.company)
-    //         console.log('https://data.etabus.gov.hk/v1/transport/kmb/route/' + kmb.route + '/' + kmb.direction + '/1')
-    //         setBaseURl('https://data.etabus.gov.hk/v1/transport/kmb/route/' + kmb.route + '/' + kmb.direction + '/1');
-    //     }
-    // }
-
-    function handledirection() {
-        if (kmb.route !== '' && kmb.direction !== '') {
-            console.log('i am handledirection:' + kmb.direction)
-            console.log('https://data.etabus.gov.hk/v1/transport/kmb/route-stop/' + kmb.route + '/' + kmb.direction + '/1')
+    function handleinput() {
+        console.log('kmb.route:' + kmb.route + 'kmb.direction' + kmb.direction + 'kmb.company' + kmb.company)
+        if (kmb.route !== '' && kmb.direction !== '' && kmb.company !== '') {
+            console.log('I am handleinput(): route=' + kmb.route + ' Direction=' + kmb.direction + ' Company=' + kmb.company)
+            console.log('BaseURl= https://rt.data.gov.hk/v1.1/transport/citybus-nwfb/route-stop/' + kmb.company + '/' + kmb.route + '/' + kmb.direction)
             setBaseURl('https://data.etabus.gov.hk/v1/transport/kmb/route-stop/' + kmb.route + '/' + kmb.direction + '/1');
         }
     }
 
-    //4. after the baseURL changed, call getroute
-    useEffect(() => { GetRoute() }, [kmb.baseURL])
+    //new 4. after clicking search, call GetRoute to get the route data
+    //Cant put all in a single func -> useEffect is needed
+    function Search() {
+        setifclear("false")
+        console.log(kmb.baseURL)
+        setData('')
+        console.log(kmb.stopinfo)
+        setStopinfo("clear")
+        setTempETAarr([])
+        setGetallstopinfo(false)
+        setTimeline('')
+        setloadingword("determinate")
+        setloadingval(0)
+    }
+    //new 4.1
+
+    useEffect(() => {
+        console.log(kmb.stopinfo)
+        if (ifclear == "false") Resetclear()
+        else if (ifclear == "true") GetRoute()
+    }, [ifclear])
+
+    function Resetclear() {
+        setifclear("true")
+    }
+
+
+
+    //new 4.2
 
     //5. Get the whole route via axios and set the data
     async function GetRoute() { //asynchronous programming 
-        if (kmb.route !== '' && kmb.direction !== '') {
+        if (kmb.route !== '' && kmb.company !== '' && kmb.direction !== '') {
             console.log('I am axios GetRoute: ' + kmb.baseURL)
             await axios.get(kmb.baseURL).
                 then((res) => {
@@ -117,52 +163,60 @@ export default function KMB({ kmb, setRoute,
 
     //7. Call getstop to calling getstopinfo to add the seq and sort
     const getStop = () => {
-        console.log(kmb.data)
         if (kmb.data === '') { }
         else {
             kmb.data.data.map((r, i) => {
-                GetStopInfo(r.stop, kmb.stopinfo, r.seq)
+                GetStopInfo(r.stop, r.seq)
             })
+
         }
     }
 
     //8. Call getstop, add seq into the data, Update the stop info whrough stpinfo.push (pass by reference)
-    async function GetStopInfo(stop, stpinfo, seq) { //asynchronous programming 
+    async function GetStopInfo(stop, seq) { //asynchronous programming 
         var stationInfoURL = 'https://data.etabus.gov.hk/v1/transport/kmb/stop/' + stop
-        if (kmb.route !== '' && kmb.data !== '') {
-            console.log('I am axios GetStopInfo: ' + stationInfoURL)
+        if (kmb.route !== '' && kmb.company !== '' && kmb.data !== '') {
+            //console.log('I am axios GetStopInfo: ' + stationInfoURL)
+
             await axios.get(stationInfoURL).
                 then((res) => {
                     if (res.code === '422') { alert(res.message); }
                     else {
-                        res.data.seq = seq;
-                        setStopinfo(res.data)
+                        //Use axios to get the data from the URL
+                        res.data.data.seq = seq;
+                        console.log(seq)
+                        console.log(res.data.data)
+                        setStopinfo(res.data.data)
                     }
                 }
                 )
         }
     }
 
+    //9. Check the stopinfo are all gotten
+    useEffect(() => { Isgetallstopinfo() }, [kmb.stopinfo])
 
-
-    function Search2() {
-        console.log(kmb.stopinfo)
-        setGetallstopinfo(true)
-        setloadings2(false)
+    function Isgetallstopinfo() {
+        if (kmb.data != '' && kmb.stopinfo != []) {
+            //console.log("kmb.data.data.length: " + kmb.data.data.length + " //kmb.stopinfo.length: " + kmb.stopinfo.length)
+            if (kmb.data.data.length == kmb.stopinfo.length) {
+                setGetallstopinfo(true)
+                setTimeout(setloadings2(false), 2000)
+            }
+        }
     }
 
-
+    //10. After all stop infos got, call getModules
     useEffect(() => { getModules() }, [kmb.getallstopinfo])
 
     const getModules = () => {
         {
             if (kmb.data === '') { }
             else {
+                console.log(kmb.data.data)
+                console.log(kmb.stopinfo)
                 setTimeline(
                     kmb.data.data.map((r, i) => {
-                        console.log(kmb.stopinfo)
-                        console.log(kmb.stopinfo[r.seq - 1])
-                        console.log(kmb.stopinfo[r.seq - 1])
                         return (
                             <TimelineItem classes={{ alignAlternate: "custom-odd-class" }} key={r.seq}>
                                 {/* <TimelineOppositeContent color="textSecondary">
@@ -170,13 +224,13 @@ export default function KMB({ kmb, setRoute,
                                 </TimelineOppositeContent> */}
                                 <TimelineSeparator>
                                     {/* <TimelineDot> */}
-                                    <IconButton size="small" onClick={() => { GetETAInfo(r.stop) }}>
+                                    <IconButton size="small" onClick={() => { setloadingword("indeterminate"); GetETAInfo(r.stop) }}>
                                         <PlaceSharpIcon sx={{ minWidth: '30px', minHeight: '30px' }} />
                                     </IconButton>
                                     {/* </TimelineDot> */}
                                     <TimelineConnector />
                                 </TimelineSeparator>
-                                <TimelineContent>{kmb.stopinfo[r.seq - 1].data.name_tc}{kmb.stopinfo[r.seq - 1].data.name_en}</TimelineContent>
+                                <TimelineContent>{kmb.stopinfo[r.seq - 1].name_tc}{kmb.stopinfo[r.seq - 1].name_en}</TimelineContent>
                             </TimelineItem>
                         );
                     }))
@@ -185,15 +239,13 @@ export default function KMB({ kmb, setRoute,
         }
     }
 
+    useEffect(() => { }, [loadingword])
 
-    // function loadinginfofunc() {
-    //     setloadinginfo(true)
-    // }
 
+    //11. After clicking the stop button, call the GetETAInfo
     async function GetETAInfo(stop) { //asynchronous programming 
-        if (kmb.route !== '' && kmb.data !== '') {
+        if (kmb.route !== '' && kmb.company !== '' && kmb.data !== '') {
             var ETAInfoURL = 'https://data.etabus.gov.hk/v1/transport/kmb/eta/' + stop + '/' + kmb.route + '/1'
-
             console.log('I am axios GetETAInfo: ' + ETAInfoURL)
             await axios.get(ETAInfoURL).
                 then((res) => {
@@ -205,14 +257,16 @@ export default function KMB({ kmb, setRoute,
                         else if (kmb.direction === 'outbound') {
                             setTempETAarr((Array)(res.data)[0].data.filter(item => item.dir === "O"))
                         }
-
+                        setloadingword("determinate")
+                        setloadingval(100)
                     }
                 })
         }
     }
 
-    useEffect(() => { console.log(kmb.tempETAarr) }, [kmb.tempETAarr])
+    useEffect(() => { }, [kmb.tempETAarr])
     useEffect(() => { }, [kmb.data])
+
 
     function Getdate(date) {
         if (date == null) return "No Service"
@@ -231,32 +285,28 @@ export default function KMB({ kmb, setRoute,
     return (
         <ThemeProvider theme={contenttheme}>
 
-            <Grid container sx={{ height: { xs: '85vh', md: '100vh' }, minHeight: '300px', justifyContent: 'center' }} >
+            <Grid container sx={{ height: { xs: '100vh' }, minHeight: '800px', justifyContent: 'center', alignContent: 'flex-start', }} >
 
-                <Grid container xs={12} sx={{ height: { xs: '5vh' }, border: 'solid 1px', justifyContent: 'center', alignItems: 'center' }}>
-                    <Grid xs={12} sm={2} >
-                        <Typography variant='h2' sx={{ textAlign: 'center' }}>
-                            Search:
-                        </Typography>
-                    </Grid>
-                    <Grid xs={12} sm={6} sx={{ width: { xs: '100vw', sm: '40vw' } }}>
-                        <TextField variant='outlined' size="small" fullWidth
-                            onChange={val => {
-                                input1.current = val;
-                            }}
-                        />
-                    </Grid>
-                    <Grid xs={12} sm={1} sx={{ width: { xs: '80vw', sm: '100px' }, ml: '10px' }}>
-                        <Button fullWidth variant='contained' color='success'
-                            onClick={(e) => {
-                                setRoute(input1.current.target.value)
-                            }}>Submit</Button>
-                    </Grid>
-                    <Button onClick={(e) => { console.log(kmb.alert1) }}>get</Button>
-                </Grid>
+                <Grid container xs={12} sx={{ marginTop: '1vh', justifyContent: 'space-evenly', alignItems: 'center', minHeight: { xs: '120px' } }} spacing={{ xs: 1, sm: 2, lg: 0, xl: 0 }}>
 
-                <Grid container xs={12} sx={{ height: { xs: '5vh' }, border: 'red solid 1px', justifyContent: 'space-evenly', alignItems: 'center' }}>
-                    <Grid xs={12} sm={3} >
+                    <Grid label='route' container xs={12} sm={10} xl={2} sx={{ alignItems: 'center', justifyContent: 'center' }} >
+                        <Grid xs={3} xl={5}>
+                            <Typography variant='h6' sx={{ textAlign: 'center' }}>
+                                Route:&nbsp;
+                            </Typography>
+                        </Grid>
+                        <Grid xs={8} xl={7}>
+                            <TextField variant='outlined' size="small" fullWidth
+
+                                onChange={(e) => {
+                                    setRou(e.target.value)
+                                }}
+                                value={kmb.route}
+                            />
+                        </Grid>
+                    </Grid>
+
+                    <Grid label='direction' xs={10} sm={5} lg={3} xl={2}>
                         <FormControl fullWidth>
                             <InputLabel >Direction</InputLabel>
                             <Select
@@ -267,40 +317,42 @@ export default function KMB({ kmb, setRoute,
                                     setDir(val);
                                 }}
                             >
-                                <MenuItem value='inbound'>A to B</MenuItem>
-                                <MenuItem value='outbound'>B to A</MenuItem>
+                                <MenuItem value='inbound'>Inbound</MenuItem>
+                                <MenuItem value='outbound'>Outbound</MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>
-
-                    <Grid xs={12} sm={2} >
+                    <Grid label='company' xs={10} sm={5} lg={3} xl={2}>
                         <FormControl fullWidth>
                             <InputLabel >Company</InputLabel>
                             <Select
                                 variant='outlined'
                                 label="Company"
-                                disabled
-                                value={kmb.company}
+                                // value={kmb.company}
+                                value='KMB'
                                 onChange={val => {
                                     setCom(val);
                                 }}
                             >
-                                <MenuItem value='NWFB'>New Bus</MenuItem>
-                                <MenuItem value='CTB'>City Bus</MenuItem>
+                                <MenuItem value='KMB'>KMB</MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid xs={12} sm={2} >
-                        <LoadingButton loading={kmb.loadings2} fullWidth variant='contained' color='success' onClick={(e) => { setloadings2(true); setTimeout(Search2, 2000) }}>Search</LoadingButton>
+                    <Grid xs={10} sm={4} lg={3} xl={2} >
+                        <LoadingButton loading={kmb.loadings2} fullWidth variant='contained' color='success' onClick={(e) => { setloadings2(true); Search(); /*setTimeout(Search, 2000)*/ }}>Search</LoadingButton>
                     </Grid>
-                    <Grid xs={12} sm={4} >
-                        <Typography variant='h1' sx={{ textAlign: 'center' }}>Bus Route: {kmb.route}</Typography>
+                    <Grid xs={10} sm={4} lg={2} xl={1} >
+                        <Button fullWidth variant='contained' color='success' onClick={(e) => { clear() }}>Clear</Button>
                     </Grid>
                 </Grid>
 
-                <Grid container xs={12} sx={{ height: { xs: '80vh' }, border: 'green solid 1px', justifyContent: 'space-evenly', alignItems: 'center' }}>
-                    <Grid xs={12} sm={4} sx={{ /*width: { xs: '100vw', sm: '40vw'*/ }}>
-                        <Card sx={{ height: { xs: '60vh' }, overflow: 'auto' }}>
+                <Grid label='BusRoute' container xs={12} sx={{ height: { xs: '200vh', sm: '80vh' }, justifyContent: 'space-evenly', alignItems: 'center', }}>
+                    <Grid xs={12} >
+                        <Typography variant='h5' sx={{ textAlign: 'center' }}>Bus Route: {kmb.route}</Typography>
+                    </Grid>
+
+                    <Grid xs={10} sm={5} md={4} >
+                        <Card sx={{ height: { xs: '70vh', sm: '70vh' }, overflow: 'auto' }}>
                             <Timeline align="alternate" sx={{ border: '1px solid' }}>
                                 <TimelineItem>
                                     <TimelineSeparator>
@@ -316,15 +368,15 @@ export default function KMB({ kmb, setRoute,
                         </Card>
                     </Grid>
 
-                    <Grid sx={{ /*width: { xs: '80vw', sm: '40vw' },*/ ml: '10px' }}>
-                        <Card sx={{ height: { xs: '60vh' }, overflow: 'auto', minWidth: 650 }}>
+                    <Grid xs={10} sm={5} md={4} >
+                        <Card sx={{ height: { xs: '70vh', sm: '70vh' }, overflow: 'auto', minWidth: '100%' }}>
                             <CardContent>
-                                <Typography component="h1" sx={{ textAlign: 'center' }}>Estimated Time:
+                                <Typography variant="h4" sx={{ textAlign: 'center' }}>Estimated Time:
                                 </Typography>
-                                {kmb.loadinginfo && <CircularProgress sx={{ ml: '280px', mt: '20vh' }} color="success" />}
+                                <LinearProgress sx={{ minWidth: '100%', transition: 'none' }} variant={loadingword} value={loadingval} color="success" />
 
                                 <TableContainer component={Paper}>
-                                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                    <Table sx={{ minWidth: '100%' }} aria-label="simple table">
                                         <TableHead>
                                             <TableRow>
                                                 <TableCell> Order </TableCell>

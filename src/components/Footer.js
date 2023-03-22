@@ -39,7 +39,7 @@ export default function footer() {
                     <Grid>
                         Location : Hong Kong
                     </Grid>
-                    <Grid>Office Hour : Monday to Friday from 9:00AM - 5:00PM (GMT+4)</Grid>
+                    <Grid>Office Hour : Monday to Friday from 9:00AM - 5:00PM (GMT+8)</Grid>
                 </Grid>
             </Typography>
         </Grid >

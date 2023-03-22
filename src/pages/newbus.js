@@ -29,7 +29,7 @@ export default function newbus({
                 <Header />
             </Grid>
 
-            <Grid xs={12} maxWidth="xl">
+            <Grid xs={12} sx={{ minHeight: { xs: '280vh', sm: '120vh', lg: '100vh' } }} maxWidth="xl" >
                 <Mainpage newbus={newbus}
                     setRoute={setRoute}
                     setBaseURl={setBaseURl}
@@ -45,18 +45,18 @@ export default function newbus({
             </Grid>
 
             <Grid xs={12} sx={{
-                // position: 'static',
-                position: "relative",
+                position: 'static',
+                // position: "relative",
                 bottom: '0px',
-                width: '100%',
-                height: '200px',
-                backgroundColor: '#2e7d32',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                mt: 'auto',
-                overflowWrap: 'break-word',
+                // width: '100%',
+                // height: '200px',
+                // backgroundColor: '#2e7d32',
+                // display: 'flex',
+                // flexDirection: 'column',
+                // alignItems: 'center',
+                // justifyContent: 'center',
+                // mt: 'auto',
+                // overflowWrap: 'break-word',
             }}>
                 <Footer />
             </Grid>

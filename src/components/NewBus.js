@@ -28,7 +28,7 @@ import TableRow from '@mui/material/TableRow';
 
 const contenttheme = createTheme({ //Create a theme which set the color
     typography: {
-        fontSize: { md: 20 },
+        fontSize: 20,
         mr: 2,
         fontFamily: 'Lilita One',
         color: 'white',
@@ -66,7 +66,8 @@ export default function Newbus({ newbus,
     const [timeline, setTimeline] = useState('') // non-serializable value cannot put in state/action
     // const [getallstopinfo, setGetallstopinfo] = useState(false)
     const [ifclear, setifclear] = useState("")
-    var temparr = []
+    const [loadingword, setloadingword] = useState("determinate")
+    const [loadingval, setloadingval] = useState(0)
 
     function clear() {
         console.log(newbus.route)
@@ -80,6 +81,8 @@ export default function Newbus({ newbus,
         setGetallstopinfo(false)
         setTimeline('')
         setloadings2(false)
+        setloadingword("determinate")
+        setloadingval(0)
     }
 
 
@@ -124,6 +127,8 @@ export default function Newbus({ newbus,
         setTempETAarr([])
         setGetallstopinfo(false)
         setTimeline('')
+        setloadingword("determinate")
+        setloadingval(0)
     }
     //new 4.1
 
@@ -163,7 +168,7 @@ export default function Newbus({ newbus,
         if (newbus.data === '') { }
         else {
             newbus.data.data.map((r, i) => {
-                GetStopInfo(r.stop, newbus.stopinfo, r.seq)
+                GetStopInfo(r.stop, r.seq)
             })
 
         }
@@ -181,6 +186,8 @@ export default function Newbus({ newbus,
                     else {
                         //Use axios to get the data from the URL
                         res.data.data.seq = seq;
+                        console.log(seq)
+                        console.log(res.data.data)
                         setStopinfo(res.data.data)
                     }
                 }
@@ -205,6 +212,7 @@ export default function Newbus({ newbus,
     useEffect(() => { getModules() }, [newbus.getallstopinfo])
 
     const getModules = () => {
+        {
             if (newbus.data === '') { }
             else {
                 console.log(newbus.data.data)
@@ -218,7 +226,7 @@ export default function Newbus({ newbus,
                                 </TimelineOppositeContent> */}
                                 <TimelineSeparator>
                                     {/* <TimelineDot> */}
-                                    <IconButton size="small" onClick={() => { GetETAInfo(r.stop) }}>
+                                    <IconButton size="small" onClick={() => { setloadingword("indeterminate"); GetETAInfo(r.stop) }}>
                                         <PlaceSharpIcon sx={{ minWidth: '30px', minHeight: '30px' }} />
                                     </IconButton>
                                     {/* </TimelineDot> */}
@@ -229,7 +237,12 @@ export default function Newbus({ newbus,
                         );
                     }))
             }
+
+        }
     }
+
+    useEffect(() => { }, [loadingword])
+
 
     //11. After clicking the stop button, call the GetETAInfo
     async function GetETAInfo(stop) { //asynchronous programming 
@@ -246,6 +259,8 @@ export default function Newbus({ newbus,
                         else if (newbus.direction === 'outbound') {
                             setTempETAarr((Array)(res.data)[0].data.filter(item => item.stop === stop && item.dir === "O"))
                         }
+                        setloadingword("determinate")
+                        setloadingval(100)
                     }
                 })
         }
@@ -272,24 +287,19 @@ export default function Newbus({ newbus,
     return (
         <ThemeProvider theme={contenttheme}>
 
-            <Grid container sx={{ height: { xs: '85vh', md: '100vh' }, minHeight: '300px', justifyContent: 'center', marginTop: '10px'  }} >
+            <Grid container sx={{ height: { xs: '100vh' }, minHeight: '800px', justifyContent: 'center', alignContent: 'flex-start', }} >
 
-                <Grid container xs={12} sx={{ height: { xs: '5vh' }, border: 'solid 1px', justifyContent: 'space-evenly', alignItems: 'center' }}>
+                <Grid container xs={12} sx={{ marginTop: '1vh', justifyContent: 'space-evenly', alignItems: 'center', minHeight: { xs: '120px' } }} spacing={{ xs: 1, sm: 2, lg: 0, xl: 0 }}>
 
-                    <Grid container xs={12} sm={2} sx={{ width: { xs: '100vw', sm: '15vw' }, alignItems: 'center' }}>
-                        <Grid xs={4}>
-                            <Typography variant='h2' sx={{ textAlign: 'center' }}>
+                    <Grid label='route' container xs={12} sm={10} xl={2} sx={{ alignItems: 'center', justifyContent: 'center' }} >
+                        <Grid xs={3} xl={5}>
+                            <Typography variant='h6' sx={{ textAlign: 'center' }}>
                                 Route:&nbsp;
                             </Typography>
                         </Grid>
-                        <Grid xs={8}>
+                        <Grid xs={8} xl={7}>
                             <TextField variant='outlined' size="small" fullWidth
-                                // onFocus={(e) => {
-                                //     console.log('Focused on input');
-                                // }}
-                                // onBlur={(e) => {
-                                //     console.log(e.target.value)
-                                // }}
+
                                 onChange={(e) => {
                                     setRou(e.target.value)
                                 }}
@@ -297,7 +307,8 @@ export default function Newbus({ newbus,
                             />
                         </Grid>
                     </Grid>
-                    <Grid xs={12} sm={2} >
+
+                    <Grid label='direction' xs={10} sm={5} lg={3} xl={2}>
                         <FormControl fullWidth>
                             <InputLabel >Direction</InputLabel>
                             <Select
@@ -308,12 +319,12 @@ export default function Newbus({ newbus,
                                     setDir(val);
                                 }}
                             >
-                                <MenuItem value='inbound'>A to B</MenuItem>
-                                <MenuItem value='outbound'>B to A</MenuItem>
+                                <MenuItem value='inbound'>Inbound</MenuItem>
+                                <MenuItem value='outbound'>Outbound</MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid xs={12} sm={2} >
+                    <Grid label='company' xs={10} sm={5} lg={3} xl={2}>
                         <FormControl fullWidth>
                             <InputLabel >Company</InputLabel>
                             <Select
@@ -329,34 +340,21 @@ export default function Newbus({ newbus,
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid xs={12} sm={2} >
+                    <Grid xs={10} sm={4} lg={3} xl={2} >
                         <LoadingButton loading={newbus.loadings2} fullWidth variant='contained' color='success' onClick={(e) => { setloadings2(true); Search(); /*setTimeout(Search, 2000)*/ }}>Search</LoadingButton>
                     </Grid>
-                    <Grid xs={12} sm={1} >
+                    <Grid xs={10} sm={4} lg={2} xl={1} >
                         <Button fullWidth variant='contained' color='success' onClick={(e) => { clear() }}>Clear</Button>
                     </Grid>
-                    {/* <Grid xs={12} sm={1} sx={{ width: { xs: '80vw', sm: '100px' }, ml: '10px' }}>
-                        <Button fullWidth variant='contained' color='success'
-                            onClick={(e) => {
-                                setRoute(input1.current.target.value)
-                            }}>Submit</Button>
-                    </Grid> */}
-                    {/* <Button onClick={(e) => { console.log(newbus.alert1) }}>get</Button> */}
                 </Grid>
 
-                <Grid container xs={12} sx={{ height: { xs: '5vh' }, border: 'red solid 1px', justifyContent: 'space-evenly', alignItems: 'center' }}>
-
-
-
-
-                    <Grid xs={12} sm={4} >
-                        <Typography variant='h1' sx={{ textAlign: 'center' }}>Bus Route: {newbus.route}</Typography>
+                <Grid label='BusRoute' container xs={12} sx={{ height: { xs: '200vh', sm: '80vh' }, justifyContent: 'space-evenly', alignItems: 'center', }}>
+                    <Grid xs={12} >
+                        <Typography variant='h5' sx={{ textAlign: 'center' }}>Bus Route: {newbus.route}</Typography>
                     </Grid>
-                </Grid>
 
-                <Grid container xs={12} sx={{ height: { xs: '80vh' }, border: 'green solid 1px', justifyContent: 'space-evenly', alignItems: 'center' }}>
-                    <Grid xs={12} sm={4} sx={{ /*width: { xs: '100vw', sm: '40vw'*/ }}>
-                        <Card sx={{ height: { xs: '60vh' }, overflow: 'auto' }}>
+                    <Grid xs={10} sm={5} md={4} >
+                        <Card sx={{ height: { xs: '70vh', sm: '70vh' }, overflow: 'auto' }}>
                             <Timeline align="alternate" sx={{ border: '1px solid' }}>
                                 <TimelineItem>
                                     <TimelineSeparator>
@@ -372,15 +370,15 @@ export default function Newbus({ newbus,
                         </Card>
                     </Grid>
 
-                    <Grid sx={{ /*width: { xs: '80vw', sm: '40vw' },*/ ml: '10px' }}>
-                        <Card sx={{ height: { xs: '60vh' }, overflow: 'auto', minWidth: 650 }}>
+                    <Grid xs={10} sm={5} md={4} >
+                        <Card sx={{ height: { xs: '70vh', sm: '70vh' }, overflow: 'auto', minWidth: '100%' }}>
                             <CardContent>
-                                <Typography component="h1" sx={{ textAlign: 'center' }}>Estimated Time:
+                                <Typography variant="h4" sx={{ textAlign: 'center' }}>Estimated Time:
                                 </Typography>
-                                <LinearProgress sx={{ minWidth: 650, transition: 'none' }} color="success" />
+                                <LinearProgress sx={{ minWidth: '100%', transition: 'none' }} variant={loadingword} value={loadingval} color="success" />
 
                                 <TableContainer component={Paper}>
-                                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                    <Table sx={{ minWidth: '100%' }} aria-label="simple table">
                                         <TableHead>
                                             <TableRow>
                                                 <TableCell> Order </TableCell>

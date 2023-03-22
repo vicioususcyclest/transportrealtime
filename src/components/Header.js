@@ -65,7 +65,7 @@ export default function Header({ page, background }) {
                     <Button sx={{ color: '#FFF', }}>About Us</Button>
                   </Link>
                   <Link to={"/newbus"} style={{ textDecoration: 'none' }}>
-                    <Button sx={{ color: '#FFF' }}>New Bus</Button>
+                    <Button sx={{ color: '#FFF' }}>New Bus/ City Bus</Button>
                   </Link>
                   {/* <Link to={"/minibus"} style={{ textDecoration: 'none', }}>
                     <Button sx={{ color: '#FFF', marign: '0px' }}><span>Minibus</span></Button>
