@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/transportrealtime/static/css/main.073c9b0a.css",
+    "main.js": "/transportrealtime/static/js/main.37aa359c.js",
+    "static/media/car.webp": "/transportrealtime/static/media/car.853939452cc5e03faa99.webp",
+    "index.html": "/transportrealtime/index.html",
+    "main.073c9b0a.css.map": "/transportrealtime/static/css/main.073c9b0a.css.map",
+    "main.37aa359c.js.map": "/transportrealtime/static/js/main.37aa359c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.073c9b0a.css",
+    "static/js/main.37aa359c.js"
+  ]
+}
