@@ -94,7 +94,7 @@ export default function Newbus({ newbus,
     }
 
     function setRou(value) {
-        setRoute(value)
+        setRoute(value.toUpperCase())
     }
 
     function setDir(value) {
@@ -212,7 +212,6 @@ export default function Newbus({ newbus,
     useEffect(() => { getModules() }, [newbus.getallstopinfo])
 
     const getModules = () => {
-        {
             if (newbus.data === '') { }
             else {
                 console.log(newbus.data.data)
@@ -236,8 +235,6 @@ export default function Newbus({ newbus,
                             </TimelineItem>
                         );
                     }))
-            }
-
         }
     }
 

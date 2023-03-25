@@ -92,7 +92,7 @@ export default function KMB({ kmb,
     }
 
     function setRou(value) {
-        setRoute(value)
+        setRoute(value.toUpperCase())
     }
 
     function setDir(value) {

@@ -11,7 +11,7 @@ export default function mainpage() {
                 <Header />
             </Grid>
 
-            <Grid xs={12} sx={{ border: '1px solid', minHeight: '500px' }} maxWidth="xl">
+            <Grid xs={12} sx={{ minHeight: '500px' }} maxWidth="xl">
                 <Mainpage />
             </Grid>
 
