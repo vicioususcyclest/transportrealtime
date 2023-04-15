@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/transportrealtime/static/css/main.073c9b0a.css",
-    "main.js": "/transportrealtime/static/js/main.e8d11a4f.js",
+    "main.js": "/transportrealtime/static/js/main.dff99580.js",
     "static/media/car.webp": "/transportrealtime/static/media/car.853939452cc5e03faa99.webp",
     "static/media/Bus.png": "/transportrealtime/static/media/Bus.19fcd21e45e8e185dbab.png",
     "index.html": "/transportrealtime/index.html",
     "main.073c9b0a.css.map": "/transportrealtime/static/css/main.073c9b0a.css.map",
-    "main.e8d11a4f.js.map": "/transportrealtime/static/js/main.e8d11a4f.js.map"
+    "main.dff99580.js.map": "/transportrealtime/static/js/main.dff99580.js.map"
   },
   "entrypoints": [
     "static/css/main.073c9b0a.css",
-    "static/js/main.e8d11a4f.js"
+    "static/js/main.dff99580.js"
   ]
 }
