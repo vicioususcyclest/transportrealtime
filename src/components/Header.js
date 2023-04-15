@@ -52,25 +52,25 @@ export default function Header({ page, background }) {
               <Grid sm={6} hd={4} container sx={{ alignItems: 'center' }}>
                 <Grid>
                   <IconButton aria-label="Home" >
-                    <Link to={"/"} style={{ color: '#FFF' }}>
+                    <Link to={"/transportrealtime/"} style={{ color: '#FFF' }}>
                       <DepartureBoardIcon sx={{ mr: 1, }} />
                     </Link>
                   </IconButton>
-                  <Link to={"/"} style={Headertheme.typography}>TransportRealtime</Link>
+                  <Link to={"/transportrealtime/"} style={Headertheme.typography}>TransportRealtime</Link>
                 </Grid>
               </Grid>
               <Grid id="button" container hd={8} sm={6} sx={{ alignItems: 'center', justifyContent: { hd: 'flex-end' } }}>
                 <Grid sx={{ justifyContent: 'flex-right' }}>
-                  <Link to={"/aboutus"} style={{ textDecoration: 'none' }}>
+                  <Link to={"/transportrealtime/aboutus"} style={{ textDecoration: 'none' }}>
                     <Button sx={{ color: '#FFF', }}>About Us</Button>
                   </Link>
-                  <Link to={"/newbus"} style={{ textDecoration: 'none' }}>
+                  <Link to={"/transportrealtime/newbus"} style={{ textDecoration: 'none' }}>
                     <Button sx={{ color: '#FFF' }}>New Bus/ City Bus</Button>
                   </Link>
                   {/* <Link to={"/minibus"} style={{ textDecoration: 'none', }}>
                     <Button sx={{ color: '#FFF', marign: '0px' }}><span>Minibus</span></Button>
                   </Link> */}
-                  <Link to={"/kmb"} style={{ textDecoration: 'none' }}>
+                  <Link to={"/transportrealtime/kmb"} style={{ textDecoration: 'none' }}>
                     <Button sx={{ color: '#FFF', }}>KMB</Button>
                   </Link>
                   {/* <Link to={"/contactus"} style={{ textDecoration: 'none' }}>
