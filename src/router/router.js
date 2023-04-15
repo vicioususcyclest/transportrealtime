@@ -10,13 +10,13 @@ import My404Component from '../containers/404Con'
 export default function router() {
     return (
         <Routes>
-            <Route path='*' element={<Navigate to="/404" replace />} />
-            <Route path="/404" element={<My404Component />} />
-            <Route path="/" element={<MainpageCon />} />
-            <Route path="/aboutus" element={<AboutUs />} />
+            <Route path='/transportrealtime/*' element={<Navigate to="/transportrealtime/404" replace />} />
+            <Route path="/transportrealtime/404" element={<My404Component />} />
+            <Route path="/transportrealtime/" element={<MainpageCon />} />
+            <Route path="/transportrealtime/aboutus" element={<AboutUs />} />
             {/* <Route path="/contactus" element={<ContactUs />} /> */}
-            <Route path="/kmb" element={<KMB />} />
-            <Route path="/newbus" element={<NEWBUS />} />
+            <Route path="/transportrealtime/kmb" element={<KMB />} />
+            <Route path="//transportrealtime/newbus" element={<NEWBUS />} />
             {/* <Route path="/minibus" element={<MINIBUS />} /> */}
         </Routes>
     )
